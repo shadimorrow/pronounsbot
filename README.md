@@ -168,9 +168,13 @@ pronoun-bot/
 ├── .dev.vars.example
 ├── .gitignore
 ├── README.md
-└── LICENSE (optional)
+└── LICENSE
 ```
+
+## AI assistance
+
+OpenAI Codex was used to assist with the development of this project.
 
 ## License
 
-No license has been assigned. Add a `LICENSE` file before redistributing the project if you want to grant explicit reuse permissions.
+This project is licensed under the BSD 3-Clause License. See the [LICENSE](LICENSE) file for details.

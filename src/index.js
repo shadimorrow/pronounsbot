@@ -76,6 +76,18 @@ async function handleUpdate(update, env) {
   const chat = message.chat;
 
   if (user.is_bot) return;
+
+  if (chat.type === "private") {
+      if (message.text.trim().startsWith("/start")) {
+          await sendMessage(
+              env,
+              chat.id,
+              "I'm a group bot! Add me to a group to use mypronoun."
+          );
+      }
+      return;
+   }
+
   if (chat.type !== "group" && chat.type !== "supergroup") return;
 
   const match = /^\/mypronoun(?:@([A-Za-z0-9_]+))?(?:\s+([\s\S]*))?$/iu
