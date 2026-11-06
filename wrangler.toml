@@ -1,0 +1,14 @@
+name = "pronoun-bot"
+main = "src/index.js"
+compatibility_date = "2026-11-06"
+
+[vars]
+BOT_USERNAME = "pronounsbot"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "pronoun-bot-db"
+database_id = "b7c089da-b5e6-43de-a79b-793515cc7a93"
+
+[triggers]
+crons = ["0 4 * * *"]
