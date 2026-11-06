@@ -8,25 +8,30 @@ A Telegram bot that lets group members set their own Telegram member tag with:
 /mypronoun she/they
 ```
 
-The project is designed for **Cloudflare Workers + D1** and receives Telegram updates through a webhook.
+This project is built for Cloudflare Workers + D1 and receives Telegram updates through a webhook.
 
-> **Implementation note:** This version uses the Telegram **HTTP Bot API** (`setChatMemberTag`) rather than MTProto. It is a JavaScript Cloudflare Worker project, not a Python project. Cloudflare Workers is a better fit for the webhook execution model than a permanently connected MTProto client.
+> Implementation note: This version uses the Telegram HTTP Bot API (`setChatMemberTag`) instead of MTProto. It is a JavaScript Cloudflare Worker project, not a Python project.
 
-## Attribution
+## Features
 
-**Created with OpenAI Codex**, based on the project requirements and reviewed/assembled with assistance from ChatGPT.
+- Lets a user set their own Telegram member tag from a chat command
+- Validates and sanitizes user input before sending it to Telegram
+- Enforces a per-user cooldown with D1 storage
+- Deduplicates webhook updates to avoid duplicate processing
+- Protects the webhook with the Telegram secret-token header
+- Stores secrets in Cloudflare Worker secrets instead of source code
 
 ## Requirements
 
 - Node.js and npm
 - A Cloudflare account
-- Wrangler CLI (installed through this project's dev dependency)
+- Wrangler CLI (installed via this project's dev dependency)
 - A Telegram bot token from [@BotFather](https://t.me/BotFather)
 - A Telegram group where the bot can be made an administrator
 
 ## Telegram permissions
 
-Add the bot to the target group and grant the administrator permission required to manage member tags (`can_manage_tags`). The exact permission availability depends on Telegram's Bot API and group configuration.
+Add the bot to the target group and grant the administrator permission required to manage member tags (`can_manage_tags`). The exact permission availability depends on Telegram's Bot API and your group type.
 
 The command only targets `message.from.id`, so a user cannot use this command to change another member's tag.
 
@@ -136,7 +141,7 @@ A local webhook requires a publicly reachable HTTPS endpoint or a suitable tunne
 - Webhook requests are authenticated using Telegram's `X-Telegram-Bot-Api-Secret-Token` header.
 - Request bodies are capped at 64 KiB.
 - The tag is limited to 16 Unicode code points.
-- The accepted tag character set excludes emoji, control characters, bidi controls and invisible formatting characters.
+- The accepted tag character set excludes emoji, control characters, bidi controls, and invisible formatting characters.
 - A per-user cooldown is enforced using D1.
 - Update IDs are claimed atomically to prevent concurrent duplicate processing.
 - Old deduplication and rate-limit records are cleaned up daily.
@@ -146,8 +151,8 @@ A local webhook requires a publicly reachable HTTPS endpoint or a suitable tunne
 ### Important limitations
 
 - The cooldown is per Telegram user across all groups, not per group.
-- D1-backed per-user cooldowns do not replace Cloudflare edge rate limiting. For stronger protection against floods from many distinct accounts, configure Cloudflare rate limiting/WAF rules for the webhook route.
-- Update claiming provides duplicate suppression, but it is not a transactional exactly-once guarantee for external Telegram API side effects. A process crash after Telegram accepts an action but before completion can still lead to a retry.
+- D1-backed per-user cooldowns do not replace Cloudflare edge rate limiting. For stronger protection against floods from many distinct accounts, configure Cloudflare rate limiting or WAF rules.
+- Update claiming provides duplicate suppression, but it is not a transactional exactly-once guarantee for external Telegram API side effects. A process crash after Telegram accepts an action but before completion can still create an inconsistent result.
 - Telegram API errors are intentionally not exposed to users. Inspect Worker logs for operational diagnostics.
 - Test the bot in a private test group before deploying it to public groups.
 
@@ -162,17 +167,10 @@ pronoun-bot/
 ├── package.json
 ├── .dev.vars.example
 ├── .gitignore
-└── README.md
+├── README.md
+└── LICENSE (optional)
 ```
 
 ## License
 
 No license has been assigned. Add a `LICENSE` file before redistributing the project if you want to grant explicit reuse permissions.
-# pronounsbot
-# pronounsbot
-# pronounsbot
-# pronounsbot
-# pronounsbot
-# pronounsbot
-# pronounsbot
-# pronounsbot
